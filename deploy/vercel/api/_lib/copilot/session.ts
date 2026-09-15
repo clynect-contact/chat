@@ -1,9 +1,8 @@
 import { createHmac, randomUUID, timingSafeEqual } from "node:crypto";
-import { hasValidSession, getAccessCode } from "../session.js";
 import { AppError } from "./errors.js";
 export const COPILOT_COOKIE = "clynect_copilot_owner";
 function secret() {
-  const key = process.env.ACCESS_SESSION_SECRET || getAccessCode();
+  const key = process.env.ACCESS_SESSION_SECRET;
   if (!key) throw new AppError("AUTH_UNAVAILABLE", 503);
   return key;
 }
@@ -42,16 +41,8 @@ export function verifyOwner(token: string) {
     return null;
   }
 }
-export function requireChatAccess(cookie: string | undefined) {
-  if (!getAccessCode()) throw new AppError("AUTH_UNAVAILABLE", 503);
-  try {
-    if (!hasValidSession(cookie)) throw new AppError("SIGN_IN_REQUIRED", 401);
-  } catch {
-    throw new AppError("SIGN_IN_REQUIRED", 401);
-  }
-}
 export function ownerSession(cookie: string | undefined, create = false) {
-  requireChatAccess(cookie);
+  secret();
   let token: string | undefined;
   try {
     token = cookie

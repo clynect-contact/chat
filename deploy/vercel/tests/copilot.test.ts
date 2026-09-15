@@ -9,9 +9,7 @@ import {
   createOwnerToken,
   verifyOwner,
   ownerSession,
-  requireChatAccess,
 } from "../api/_lib/copilot/session.js";
-import { createSessionToken } from "../api/_lib/session.js";
 import { emptyDraft, applyChanges } from "../api/_lib/copilot/contracts.js";
 import { guard } from "../api/_lib/copilot/http.js";
 import { testStore } from "./copilot-store.js";
@@ -19,21 +17,21 @@ const extractor = async (text: any, draft: any) => fixtureChanges(text, draft);
 process.env.ACCESS_CODE = "test-only-access-code";
 process.env.ACCESS_SESSION_SECRET = "test-only-secret";
 process.env.COPILOT_WRITES_ENABLED = "true";
-test("signed browser ownership requires Chat access, rejects tampering and missing configuration", () => {
+test("anonymous browser ownership isolates sessions and rejects tampering", () => {
+  delete process.env.ACCESS_CODE;
   const owner = createOwnerToken();
   assert.equal(verifyOwner(owner.token), owner.id);
   assert.equal(verifyOwner(owner.token + "x"), null);
-  assert.throws(() => ownerSession(undefined), /SIGN_IN_REQUIRED/);
-  assert.throws(() => requireChatAccess("bad=%ZZ"), /SIGN_IN_REQUIRED/);
-  const access = "clynect_access=" + createSessionToken();
-  assert.equal(
-    ownerSession(access + "; clynect_copilot_owner=" + owner.token).id,
-    owner.id,
-  );
-  assert.notEqual(ownerSession(access, true).id, owner.id);
-  delete process.env.ACCESS_CODE;
-  assert.throws(() => requireChatAccess(access), /AUTH_UNAVAILABLE/);
-  process.env.ACCESS_CODE = "test-only-access-code";
+  assert.throws(() => ownerSession(undefined), /SESSION_REQUIRED/);
+  assert.equal(ownerSession("clynect_copilot_owner=" + owner.token).id, owner.id);
+  const first = ownerSession(undefined, true);
+  const second = ownerSession(undefined, true);
+  assert.notEqual(first.id, second.id);
+  assert.ok(first.cookie?.includes("HttpOnly"));
+  assert.throws(() => ownerSession("clynect_copilot_owner=" + owner.token + "x"), /SESSION_REQUIRED/);
+  delete process.env.ACCESS_SESSION_SECRET;
+  assert.throws(() => ownerSession(undefined, true), /AUTH_UNAVAILABLE/);
+  process.env.ACCESS_SESSION_SECRET = "test-only-secret";
 });
 test("mutation guard rejects missing and cross-origin requests; feature flag fails closed", () => {
   const res = { setHeader() {} } as any;

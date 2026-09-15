@@ -17,13 +17,12 @@ Add these server-only Vercel environment variables (never prefix them with VITE_
 - `COPILOT_PROVIDER`: `openai`
 - `COPILOT_ENABLED`: `true`
 - `COPILOT_WRITES_ENABLED`: `true`
-- `ACCESS_CODE`: a private, randomly generated code of at least 24 characters
 - `ACCESS_SESSION_SECRET`: a separate random secret of at least 32 bytes
 - `COPILOT_RETENTION_DAYS`: `7`
 - `COPILOT_HOURLY_LIMIT`: `30`
 - `COPILOT_GLOBAL_HOURLY_LIMIT`: `100`
 
-The public page requires the private access code before the API can be used. Conversations belong to an HttpOnly signed browser cookie, not a Clynect account. Clearing cookies loses access to that browser's previous conversations. This is an internal pilot; mission publication, matching, pricing, account integration and sending support messages are not connected. Saving creates a private Copilot draft only.
+The public page opens directly and creates a signed anonymous browser session. The access-code gate is not used. Conversations belong to an HttpOnly signed browser cookie, not a Clynect account. Clearing cookies loses access to that browser's previous conversations. This is a public pilot with per-browser and global AI usage limits; mission publication, matching, pricing, account integration and sending support messages are not connected. Saving creates a private Copilot draft only.
 
 Documents are limited to 4 MiB. Raw uploaded bytes are not retained. Text PDFs and DOCX are supported; scanned PDFs require OCR elsewhere.
 
