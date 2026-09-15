@@ -44,7 +44,7 @@ export class SupabaseStorage implements Storage {
       .eq("id", id)
       .gt("expires_at", new Date().toISOString())
       .maybeSingle();
-    if (error) throw new AppError("STORAGE_UNAVAILABLE", 503);
+    if (error) { console.error("copilot_storage", { code: error.code, message: error.message }); throw new AppError("STORAGE_UNAVAILABLE", 503); }
     return data as Stored<T> | null;
   }
   async list<T>(owner: string, kind: string) {
@@ -55,7 +55,7 @@ export class SupabaseStorage implements Storage {
       .gt("expires_at", new Date().toISOString())
       .order("updated_at", { ascending: false })
       .limit(50);
-    if (error) throw new AppError("STORAGE_UNAVAILABLE", 503);
+    if (error) { console.error("copilot_storage", { code: error.code, message: error.message }); throw new AppError("STORAGE_UNAVAILABLE", 503); }
     return (data ?? []) as Stored<T>[];
   }
   async create(owner: string, kind: string, id: string, data: unknown) {
@@ -96,7 +96,7 @@ export class SupabaseStorage implements Storage {
       .eq("version", version)
       .gt("expires_at", new Date().toISOString())
       .select("id");
-    if (error) throw new AppError("STORAGE_UNAVAILABLE", 503);
+    if (error) { console.error("copilot_storage", { code: error.code, message: error.message }); throw new AppError("STORAGE_UNAVAILABLE", 503); }
     if (!rows?.length) throw new AppError("CONFLICT", 409);
   }
   async save(
@@ -138,7 +138,7 @@ export class SupabaseStorage implements Storage {
         Math.max(1, Number(process.env.COPILOT_GLOBAL_HOURLY_LIMIT) || 100),
       ),
     });
-    if (error) throw new AppError("STORAGE_UNAVAILABLE", 503);
+    if (error) { console.error("copilot_storage", { code: error.code, message: error.message }); throw new AppError("STORAGE_UNAVAILABLE", 503); }
     if (data !== true) throw new AppError("RATE_LIMIT", 429);
   }
 }
