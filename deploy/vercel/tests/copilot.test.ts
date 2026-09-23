@@ -191,11 +191,11 @@ test("conversation reply answers the latest message instead of returning a canne
     const c = await service.create({ role: "talent", locale: "en" });
     const result = await service.respond({
       conversationId: c.id,
-      message: "How do I find real projects?",
+      message: "How can I find real projects through Clynect?",
       locale: "en",
       requestId: randomUUID(),
     });
-    assert.equal(latest, "How do I find real projects?");
+    assert.equal(latest, "How can I find real projects through Clynect?");
     assert.match(
       result.conversation.messages.at(-1)!.text,
       /Live mission search is not connected/,

@@ -211,6 +211,19 @@ export class CopilotService {
         reply = fr
           ? "Je peux structurer des critères professionnels liés à la mission, sans critères discriminatoires."
           : "I can structure job-related professional requirements without discriminatory criteria.";
+      else if (
+        /(?:find|search|show|browse|discover|chercher|trouver|voir|afficher).{0,50}(?:projects?|missions?|jobs?|opportunit|candidates?|profils?)/i.test(
+          req.message,
+        )
+      )
+        reply = await this.responder({
+          locale: req.locale,
+          role: c.role,
+          message: req.message,
+          history: c.messages,
+          draft: c.draft,
+          changedFields: [],
+        });
       else if (isKnowledgeQuestion(req.message)) {
         if (/tarif|prix|pricing|price|commission|abonnement/i.test(req.message))
           reply = fr
