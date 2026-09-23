@@ -175,6 +175,39 @@ test("provider failure preserves user message and retry does not duplicate it", 
     await pg.close();
   }
 });
+test("conversation reply answers the latest message instead of returning a canned sheet status", async () => {
+  const { pg, db } = await testStore();
+  try {
+    let latest = "";
+    const service = new CopilotService(
+      db,
+      extractor,
+      randomUUID(),
+      async (context) => {
+        latest = context.message;
+        return "Live mission search is not connected yet. I can help refine your target role and search criteria.";
+      },
+    );
+    const c = await service.create({ role: "talent", locale: "en" });
+    const result = await service.respond({
+      conversationId: c.id,
+      message: "How do I find real projects?",
+      locale: "en",
+      requestId: randomUUID(),
+    });
+    assert.equal(latest, "How do I find real projects?");
+    assert.match(
+      result.conversation.messages.at(-1)!.text,
+      /Live mission search is not connected/,
+    );
+    assert.doesNotMatch(
+      result.conversation.messages.at(-1)!.text,
+      /draft is ready|sheet is ready/i,
+    );
+  } finally {
+    await pg.close();
+  }
+});
 test("foreign and wrong-purpose attachments are rejected; quota and expiry enforced", async () => {
   const { pg, db } = await testStore();
   try {

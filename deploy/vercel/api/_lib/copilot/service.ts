@@ -11,7 +11,6 @@ import {
   completeDraft,
   parseField,
   fieldSchema,
-  fieldDefinitions,
   missionFields,
   profileFields,
   type Conversation,
@@ -19,7 +18,12 @@ import {
 } from "./contracts.js";
 import { AppError, assert } from "./errors.js";
 import { type Storage } from "./storage.js";
-import { type Extractor, providerMode } from "./provider.js";
+import {
+  type Extractor,
+  type Responder,
+  providerMode,
+  respondToUser,
+} from "./provider.js";
 import { isKnowledgeQuestion, retrieve } from "./knowledge.js";
 const hash = (x: unknown) =>
   createHash("sha256").update(JSON.stringify(x)).digest("hex");
@@ -29,6 +33,7 @@ export class CopilotService {
     private db: Storage,
     private extractor: Extractor,
     private owner: string,
+    private responder: Responder = respondToUser,
   ) {}
   async session(input?: unknown): Promise<Session> {
     const row = await this.db.get<{
@@ -216,23 +221,30 @@ export class CopilotService {
           reply = sources.map((s) => s.content).join("\n\n");
         }
       } else if (c.draft) {
+        const changes = await this.extractor(text, c.draft);
         c.draft = applyChanges(
           c.draft,
-          await this.extractor(text, c.draft),
+          changes,
           text,
           req.attachmentIds.length ? "document" : "message",
         );
-        const missing = c.draft.missing_fields
-          .slice(0, 2)
-          .map((f) => fieldDefinitions[f][fr ? 0 : 1])
-          .join(", ");
-        reply = fr
-          ? `Votre fiche est prête à relire.${missing ? " Pouvez-vous préciser : " + missing + " ?" : " Vérifiez les champs puis enregistrez la fiche privée."}`
-          : `Your draft is ready to review.${missing ? " Please clarify: " + missing + "?" : " Review the fields and save your private draft."}`;
+        reply = await this.responder({
+          locale: req.locale,
+          role: c.role,
+          message: req.message,
+          history: c.messages,
+          draft: c.draft,
+          changedFields: changes.map((change) => change.field),
+        });
       } else
-        reply = fr
-          ? "Choisissez « Mission » ou « Profil » pour préparer une fiche. Je peux aussi expliquer Clynect à partir de la spécification disponible."
-          : "Choose Mission or Profile to prepare a draft. I can also explain Clynect using the available specification.";
+        reply = await this.responder({
+          locale: req.locale,
+          role: c.role,
+          message: req.message,
+          history: c.messages,
+          draft: null,
+          changedFields: [],
+        });
       c.locale = req.locale;
       c.messages.push({
         id: replyId,
