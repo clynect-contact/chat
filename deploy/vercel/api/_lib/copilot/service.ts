@@ -227,11 +227,11 @@ export class CopilotService {
           .map((f) => fieldDefinitions[f][fr ? 0 : 1])
           .join(", ");
         reply = fr
-          ? `Votre brouillon est prêt à relire.${missing ? " Pouvez-vous préciser : " + missing + " ?" : " Vérifiez les champs puis enregistrez le brouillon privé."}`
+          ? `Votre fiche est prête à relire.${missing ? " Pouvez-vous préciser : " + missing + " ?" : " Vérifiez les champs puis enregistrez la fiche privée."}`
           : `Your draft is ready to review.${missing ? " Please clarify: " + missing + "?" : " Review the fields and save your private draft."}`;
       } else
         reply = fr
-          ? "Choisissez « Mission » ou « Profil » pour préparer un brouillon. Je peux aussi expliquer Clynect à partir de la spécification disponible."
+          ? "Choisissez « Mission » ou « Profil » pour préparer une fiche. Je peux aussi expliquer Clynect à partir de la spécification disponible."
           : "Choose Mission or Profile to prepare a draft. I can also explain Clynect using the available specification.";
       c.locale = req.locale;
       c.messages.push({

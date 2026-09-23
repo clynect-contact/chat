@@ -11,11 +11,11 @@ export const knowledge: Record<Locale, Source[]> = {
     },
     {
       id: "drafts",
-      title: "Spécification Clynect · brouillons",
+      title: "Spécification Clynect · fiches privées",
       version: "2026-09-03 · staging",
       approved: false,
       content:
-        "Les missions et profils sont enregistrés en brouillons privés. Une publication, une candidature ou une prise de contact nécessite une validation distincte. Ces actions ne sont pas activées dans cette version.",
+        "Les missions et profils sont enregistrés dans des fiches privées. Une publication, une candidature ou une prise de contact nécessite une validation distincte. Ces actions ne sont pas activées dans cette version.",
     },
     {
       id: "privacy",

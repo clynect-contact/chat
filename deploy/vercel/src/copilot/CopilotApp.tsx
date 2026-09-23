@@ -433,7 +433,7 @@ export default function CopilotApp({
       if (!input)
         setInput(
           locale === "fr"
-            ? "Préparez mon brouillon à partir de ce document."
+            ? "Préparez ma fiche à partir de ce document."
             : "Prepare my draft from this document.",
         );
     } catch (e) {

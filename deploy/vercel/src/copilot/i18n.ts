@@ -3,7 +3,7 @@ export const copy = {
   fr: {
     space: "VOTRE ESPACE",
     copilot: "Copilot",
-    drafts: "Mes brouillons",
+    drafts: "Mes fiches",
     privateSpace: "Espace privé",
     control: "Vos données, votre contrôle",
     workspace: "Espace de travail",
@@ -28,11 +28,11 @@ export const copy = {
     attach: "Joindre un document",
     formats: "PDF ou DOCX · 4 Mo max.",
     trust:
-      "Vos brouillons restent privés. Vous gardez la main sur chaque action.",
+      "Vos fiches restent privées. Vous gardez la main sur chaque action.",
     newChat: "Nouvelle conversation",
     recent: "CONVERSATIONS",
-    empty: "Aucun brouillon enregistré pour le moment.",
-    start: "Créer un brouillon",
+    empty: "Aucune fiche enregistrée pour le moment.",
+    start: "Créer une fiche",
     business: "Recruteur",
     freelance: "Freelance",
     projectRole: "Porteur de projet",
@@ -40,12 +40,12 @@ export const copy = {
     newMission: "Nouvelle mission",
     newProfile: "Nouveau profil",
     conversation: "Conversation",
-    review: "Voir le brouillon",
-    privateDraft: "Brouillon privé",
+    review: "Voir la fiche",
+    privateDraft: "Fiche privée",
     complete: "renseigné",
     missing: "À compléter",
-    save: "Enregistrer le brouillon privé",
-    saved: "Brouillon enregistré",
+    save: "Enregistrer la fiche privée",
+    saved: "Fiche enregistrée",
     edit: "Modifier",
     cancel: "Annuler",
     apply: "Valider",
@@ -64,9 +64,9 @@ export const copy = {
     support: "Contacter le support",
     uploadTitle: "Ajouter un CV ou un brief",
     uploadInfo:
-      "Le texte sera extrait sur le serveur pour préparer votre brouillon. Le fichier original n’est pas conservé. Utilisez uniquement des documents fictifs dans cette démonstration.",
+      "Le texte sera extrait sur le serveur pour préparer votre fiche. Le fichier original n’est pas conservé. Utilisez uniquement des documents fictifs dans cette démonstration.",
     consent:
-      "J’accepte l’extraction et le traitement du document pour ce brouillon.",
+      "J’accepte l’extraction et le traitement du document pour cette fiche.",
     selectFile: "Choisir le document",
     uploading: "Extraction du document…",
     signinTitle: "Enregistrer dans votre espace",
@@ -75,7 +75,7 @@ export const copy = {
     signin: "Continuer en session de démonstration",
     handoffTitle: "Vérifier la demande au support",
     handoffInfo:
-      "Les 5 derniers messages et la référence du brouillon seront inclus. En démonstration, la demande sera conservée localement et ne sera pas envoyée.",
+      "Les 5 derniers messages et la référence de la fiche seront inclus. En démonstration, la demande sera conservée localement et ne sera pas envoyée.",
     handoffConsent: "J’accepte de joindre ces messages à la demande.",
     confirmHandoff: "Confirmer la demande",
     handoffDone:
@@ -103,12 +103,12 @@ export const copy = {
     quick: "Pour commencer",
     privacy: "Confidentialité",
     pricing: "Tarifs et abonnements",
-    draftSavedNote: "Vous pouvez continuer à modifier ce brouillon.",
+    draftSavedNote: "Vous pouvez continuer à modifier cette fiche.",
     available: "Disponible immédiatement",
     remote: "Remote",
     hybrid: "Hybride",
     onsite: "Sur site",
-    draftUpdated: "Brouillon mis à jour",
+    draftUpdated: "Fiche mise à jour",
     original: "Texte source",
     copilotName: "Cly · Copilot IA",
   },
@@ -252,7 +252,7 @@ export function errorText(code: string, locale: Locale) {
       "Start a new conversation to continue.",
     ],
     PROVIDER_UNCONFIGURED: [
-      "Configurez la clé et le modèle IA sur le serveur. Votre brouillon est conservé.",
+      "Configurez la clé et le modèle IA sur le serveur. Votre fiche est conservée.",
       "Configure the AI key and model on the server. Your draft is preserved.",
     ],
     PROVIDER_FAILURE: [
@@ -300,7 +300,7 @@ export function errorText(code: string, locale: Locale) {
       "The document is too long. Include only relevant professional information.",
     ],
     CONFLICT: [
-      "Le brouillon a changé. La version actuelle a été rechargée ; réessayez.",
+      "La fiche a changé. La version actuelle a été rechargée ; réessayez.",
       "The draft changed. The current version was reloaded; please retry.",
     ],
     BUSY: [
@@ -312,7 +312,7 @@ export function errorText(code: string, locale: Locale) {
       "The temporary limit was reached. Try again later.",
     ],
     INTEGRATION_UNAVAILABLE: [
-      "Le service Clynect n’est pas connecté. Votre brouillon est conservé.",
+      "Le service Clynect n’est pas connecté. Votre fiche est conservée.",
       "The Clynect service is not connected. Your draft is preserved.",
     ],
     AUTH_UNAVAILABLE: [
@@ -327,7 +327,7 @@ export function errorText(code: string, locale: Locale) {
   return (
     messages[code]?.[locale === "fr" ? 0 : 1] ??
     (locale === "fr"
-      ? "Une erreur est survenue. Votre brouillon reste disponible. Réessayez."
+      ? "Une erreur est survenue. Votre fiche reste disponible. Réessayez."
       : "Something went wrong. Your draft is still available. Please retry.")
   );
 }
