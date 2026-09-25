@@ -55,8 +55,9 @@ export function ownerSession(cookie: string | undefined, create = false) {
   if (id) return { id, cookie: null };
   if (!create) throw new AppError("SESSION_REQUIRED", 401);
   const next = createOwnerToken();
+  const production = process.env.NODE_ENV === "production";
   return {
     id: next.id,
-    cookie: `${COPILOT_COOKIE}=${next.token}; HttpOnly; SameSite=Strict; Path=/; Max-Age=604800${process.env.NODE_ENV === "production" ? "; Secure" : ""}`,
+    cookie: `${COPILOT_COOKIE}=${next.token}; HttpOnly; SameSite=${production ? "None" : "Strict"}; Path=/; Max-Age=604800${production ? "; Secure; Partitioned" : ""}`,
   };
 }

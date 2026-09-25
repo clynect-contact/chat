@@ -33,3 +33,21 @@ Documents are limited to 4 MiB. Raw uploaded bytes are not retained. Text PDFs a
 Tests exercise the migration and atomic SQL functions in PGlite, ownership, request retries, quotas, expiry, draft edits/saves and document extraction. Test code never uses a live database or the OpenAI key.
 
 Before each deployment, make a private backup of source/configuration and any live database data. Never commit secret files or backup archives.
+
+## Chat widget integration
+
+Add this before the closing `</body>` tag on the main site:
+
+```html
+<script
+  src="https://clynect-chat.vercel.app/clynect-chat-widget.js"
+  data-clynect-chat
+  data-position="right"
+  data-label="Ouvrir Cly, le Copilot Clynect"
+  defer
+></script>
+```
+
+The script adds an accessible bottom-right launcher and a responsive chat panel. It is isolated from the host site's CSS with Shadow DOM. Optional attributes are `data-position="left"`, `data-chat-url`, `data-title`, `data-label`, `data-greeting`, and `data-hint`. The host page can also call `ClynectChat.open()`, `ClynectChat.close()`, or `ClynectChat.toggle()`.
+
+Production browser sessions use a `Secure`, `SameSite=None`, partitioned HttpOnly cookie so each embedding site receives an isolated seven-day Chat session. The widget does not receive the main site's logged-in identity; account SSO requires a separate authenticated integration.

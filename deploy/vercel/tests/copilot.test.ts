@@ -28,6 +28,14 @@ test("anonymous browser ownership isolates sessions and rejects tampering", () =
   const second = ownerSession(undefined, true);
   assert.notEqual(first.id, second.id);
   assert.ok(first.cookie?.includes("HttpOnly"));
+  const environment = process.env.NODE_ENV;
+  process.env.NODE_ENV = "production";
+  const embedded = ownerSession(undefined, true);
+  assert.match(embedded.cookie!, /SameSite=None/);
+  assert.match(embedded.cookie!, /Secure/);
+  assert.match(embedded.cookie!, /Partitioned/);
+  if (environment) process.env.NODE_ENV = environment;
+  else delete process.env.NODE_ENV;
   assert.throws(() => ownerSession("clynect_copilot_owner=" + owner.token + "x"), /SESSION_REQUIRED/);
   delete process.env.ACCESS_SESSION_SECRET;
   assert.throws(() => ownerSession(undefined, true), /AUTH_UNAVAILABLE/);
