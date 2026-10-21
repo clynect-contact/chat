@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Démonstration du widget Cly</title>
+    <style>
+      * { box-sizing: border-box; }
+      body { margin: 0; min-height: 100vh; font-family: Inter, Arial, sans-serif; color: #16213a; background: #f8fafc; }
+      header { height: 72px; display: flex; align-items: center; padding: 0 max(24px, calc((100vw - 1480px) / 2)); border-bottom: 1px solid #e4eaf2; background: #fff; }
+      header strong { font-size: 27px; }
+      nav { display: flex; gap: 44px; margin: auto; color: #61718a; }
+      main { max-width: 1480px; margin: auto; padding: 80px 32px; }
+      h1 { max-width: 720px; margin: 0 0 24px; font-size: clamp(44px, 6vw, 76px); line-height: 1; }
+      p { max-width: 700px; color: #5d6c84; font-size: 22px; line-height: 1.55; }
+      .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 34px; margin-top: 80px; }
+      .card { min-height: 220px; padding: 36px; border: 1px solid #e0e7f0; border-radius: 28px; background: #fff; box-shadow: 0 15px 50px #17325b0c; }
+      .card h2 { margin-top: 0; }
+      @media (max-width: 700px) { nav { display: none; } main { padding: 48px 22px; } .cards { grid-template-columns: 1fr; } }
+    </style>
+  </head>
+  <body>
+    <header><strong>Clynect</strong><nav><span>Pour qui ?</span><span>Tarifs</span><span>Fonctionnalités</span><span>Missions</span></nav></header>
+    <main>
+      <h1>Vos projets IT, plus simples à connecter</h1>
+      <p>Cette page simule le site principal. Utilisez le bouton de chat en bas à droite pour ouvrir Cly dans son panneau intégré.</p>
+      <section class="cards"><article class="card"><h2>Vous avez un projet ?</h2><p>Structurez votre mission avec Cly.</p></article><article class="card"><h2>Vous cherchez une mission ?</h2><p>Préparez votre profil talent avec Cly.</p></article></section>
+    </main>
+    <script src="/clynect-chat-widget.js" data-position="right" defer></script>
+  </body>
+</html>
