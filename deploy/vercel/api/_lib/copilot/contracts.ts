@@ -215,6 +215,11 @@ export type Message = {
   role: "user" | "assistant";
   text: string;
   sources?: Source[];
+  cta?: {
+    label: string;
+    url: string;
+    plan: "free" | "start" | "pro" | "unltd";
+  };
   createdAt: string;
 };
 export type Conversation = {

@@ -216,6 +216,22 @@ test("conversation reply answers the latest message instead of returning a canne
     await pg.close();
   }
 });
+test("subscription intent adds a verified plan CTA without charging project owners", async () => {
+  const { pg, db } = await testStore();
+  try {
+    const service = new CopilotService(db, extractor, randomUUID());
+    const talent = await service.create({ role: "talent", locale: "fr" });
+    const priced = await service.respond({ conversationId: talent.id, message: "Quels sont les tarifs des abonnements ?", locale: "fr", requestId: randomUUID() });
+    const message = priced.conversation.messages.at(-1)!;
+    assert.match(message.text, /START à 19,99 € par mois/);
+    assert.equal(message.cta?.plan, "start");
+    assert.equal(message.cta?.url, "https://clynect.fr/billing/subscribe/start");
+    const owner = await service.create({ role: "business", locale: "fr" });
+    const free = await service.respond({ conversationId: owner.id, message: "Combien coûte la publication d’une mission ?", locale: "fr", requestId: randomUUID() });
+    assert.equal(free.conversation.messages.at(-1)!.cta?.plan, "free");
+    assert.match(free.conversation.messages.at(-1)!.text, /gratuit/i);
+  } finally { await pg.close(); }
+});
 test("foreign and wrong-purpose attachments are rejected; quota and expiry enforced", async () => {
   const { pg, db } = await testStore();
   try {

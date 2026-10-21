@@ -976,6 +976,15 @@ export default function CopilotApp({
                           <p>{s.content}</p>
                         </details>
                       ))}
+                      {m.role === "assistant" && m.cta && (
+                        <a className={`subscription-cta plan-${m.cta.plan}`} href={m.cta.url} target="_top">
+                          <span>
+                            {m.cta.label}
+                            <small>{m.cta.plan === "free" ? locale === "fr" ? "Publication gratuite" : "Free publishing" : m.cta.plan.toUpperCase()}</small>
+                          </span>
+                          <ArrowUpRight size={17} />
+                        </a>
+                      )}
                       {m.role === "assistant" && (
                         <div className="feedback">
                           <button

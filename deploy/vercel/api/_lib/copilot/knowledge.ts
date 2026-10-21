@@ -65,7 +65,7 @@ export function retrieve(text: string, locale: Locale) {
   return knowledge[locale].filter((s) => s.id === topic);
 }
 export function isKnowledgeQuestion(text: string) {
-  return /clynect|pricing|price|tarif|prix|commission|abonnement|subscription|privacy|confidentialit|rgpd|gdpr|politique|legal|juridique|how.*work|comment.*fonctionne/i.test(
+  return /clynect|pricing|price|tarif|prix|commission|abonnement|subscription|co[uû]t|combien|privacy|confidentialit|rgpd|gdpr|politique|legal|juridique|how.*work|comment.*fonctionne/i.test(
     text,
   );
 }

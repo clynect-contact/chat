@@ -913,6 +913,12 @@ h1 span {
   display: grid;
   place-items: center;
 }
+.subscription-cta{display:flex;align-items:center;justify-content:space-between;gap:14px;width:min(100%,390px);margin:14px 0 4px;padding:12px 14px;border:1px solid #bfd4f2;border-radius:13px;background:linear-gradient(135deg,#f3f8ff,#e8f2ff);color:#1f5fa5;text-decoration:none;box-shadow:0 8px 22px #245d9b12}
+.subscription-cta:hover{border-color:#7eafe6;transform:translateY(-1px)}
+.subscription-cta>span{display:grid;gap:2px;font-weight:750}
+.subscription-cta small{color:#60748f;font-size:10px;font-weight:650;letter-spacing:.06em}
+.subscription-cta.plan-pro{background:linear-gradient(135deg,#f4efff,#e8f0ff);color:#6840aa}
+.subscription-cta.plan-unltd{background:linear-gradient(135deg,#fff8e8,#fff0ce);border-color:#efd297;color:#8d5c00}
 .feedback button:hover {
   color: #456ada;
 }

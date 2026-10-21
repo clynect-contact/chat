@@ -25,6 +25,7 @@ import {
   respondToUser,
 } from "./provider.js";
 import { isKnowledgeQuestion, retrieve } from "./knowledge.js";
+import { pricingReply, recommendSubscription } from "./commercial.js";
 const hash = (x: unknown) =>
   createHash("sha256").update(JSON.stringify(x)).digest("hex");
 const now = () => new Date().toISOString();
@@ -203,6 +204,7 @@ export class CopilotService {
       let reply: string;
       let sources: ReturnType<typeof retrieve> | undefined;
       const fr = req.locale === "fr";
+      const offer = recommendSubscription(req.message, c.role, req.locale, c.draft);
       if (
         /(?:only|only hire|uniquement|seulement).{0,30}(?:hommes|femmes|men|women|blancs|white)|(?:under|moins de)\s*\d+\s*(?:years old|ans)/i.test(
           text,
@@ -223,12 +225,11 @@ export class CopilotService {
           history: c.messages,
           draft: c.draft,
           changedFields: [],
+          offer,
         });
       else if (isKnowledgeQuestion(req.message)) {
-        if (/tarif|prix|pricing|price|commission|abonnement/i.test(req.message))
-          reply = fr
-            ? "Je ne dispose pas de tarifs approuvés. Contactez l’équipe Clynect pour les confirmer."
-            : "I do not have approved pricing. Contact the Clynect team to confirm it.";
+        if (/tarif|prix|pricing|price|commission|abonnement|co[uû]t|combien/i.test(req.message))
+          reply = pricingReply(req.locale, offer ?? recommendSubscription(req.message + " freelance", "talent", req.locale, c.draft)!);
         else {
           sources = retrieve(req.message, req.locale);
           reply = sources.map((s) => s.content).join("\n\n");
@@ -248,6 +249,7 @@ export class CopilotService {
           history: c.messages,
           draft: c.draft,
           changedFields: changes.map((change) => change.field),
+          offer,
         });
       } else
         reply = await this.responder({
@@ -257,6 +259,7 @@ export class CopilotService {
           history: c.messages,
           draft: null,
           changedFields: [],
+          offer,
         });
       c.locale = req.locale;
       c.messages.push({
@@ -264,6 +267,7 @@ export class CopilotService {
         role: "assistant",
         text: reply,
         ...(sources ? { sources } : {}),
+        ...(offer ? { cta: offer } : {}),
         createdAt: now(),
       });
       c.updatedAt = now();
